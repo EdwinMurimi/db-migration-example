@@ -1,0 +1,36 @@
+# This workflow uses Flyway Hub to test the Flyway database migrations in the 'sql_versions' path(s).
+#
+# The workflow will run automatically against all pull requests that modify files under 'sql_versions'.
+#
+# It will also run on all pushes to 'main' that modify files under 'sql_versions'.
+#
+# In order to use this workflow you will need to create a Github Actions secret called
+# FLYWAY_HUB_ACCESS_TOKEN containing a valid Flyway Hub API access token.
+#
+name: Database Migration Tests with Flyway
+
+on:
+  push:
+    branches:
+    - 'main'
+    paths:
+      - 'sql_versions/**'
+  pull_request:
+    paths:
+    - 'sql_versions/**'
+  workflow_dispatch: {}
+
+jobs:
+  test-migrations:
+    name: Test flyway migration scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout/@v2
+      - name: Test migrations on Flyway Hub
+        uses: red-gate/flyway-hub-migration-test@v4
+        with:
+          projectName: db-migration-example
+          engine: postgres-13
+          migrationDirs: sql_versions  
+env:
+  FLYWAYHUB_ACCESS_TOKEN: ${{ secrets.FLYWAY_HUB_ACCESS_TOKEN }}
