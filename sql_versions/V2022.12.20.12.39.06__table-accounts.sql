@@ -4,5 +4,6 @@ CREATE TABLE public.accounts (
 	password VARCHAR ( 50 ) NOT NULL,
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
 	created_on TIMESTAMP NOT NULL,
+	updated_on TIMESTAMP NOT NULL,
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
